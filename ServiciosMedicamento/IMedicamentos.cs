@@ -12,7 +12,7 @@ namespace ServiciosMedicamento
     // NOTA: Esta interfaz contiene los metodos que se van a exponer afuera, que queremos que sean consumidos por un cliente
     // NOTA: puede usar el comando "Rename" del menú "Refactorizar" para cambiar el nombre de interfaz "IService1" en el código y en el archivo de configuración a la vez.
     [ServiceContract]
-    public interface IService1
+    public interface IMedicamentos
     {
         // Listado de Medicamentos
         [OperationContract]
