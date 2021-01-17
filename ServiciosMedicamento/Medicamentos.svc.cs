@@ -42,7 +42,30 @@ namespace ServiciosMedicamento
 
         public List<FormaFarmaceuticaCLS> listarFormaFarmaceutica()
         {
-            throw new NotImplementedException();
+            //Creo una lista 
+            List<FormaFarmaceuticaCLS> listaFormaFarmaceutica = new List<FormaFarmaceuticaCLS>();
+
+            try
+            {
+                using (var bd = new MedicoEntities()) //Creo una instancia del contexto
+                {
+                    //Listo el listado de tipos de medicamentos, que esten habilitados (1)
+                    listaFormaFarmaceutica = bd.FormaFarmaceutica.Where(p => p.BHABILITADO == 1)
+                        //
+                        .Select(p => new FormaFarmaceuticaCLS
+                        {
+                            iidformafarmaceutica = p.IIDFORMAFARMACEUTICA,
+                            nombreFormaFarmaceutica = p.NOMBRE
+
+                        }).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                listaFormaFarmaceutica = null;
+
+            }
+            return listaFormaFarmaceutica;
         }
 
         public List<MedicamentoCLS> listarMedicamentos()
