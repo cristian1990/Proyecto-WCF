@@ -1,4 +1,5 @@
 ﻿using ServiciosMedicamento.Clases;
+using ServiciosMedicamento.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,28 @@ namespace ServiciosMedicamento
     {
         public int eliminarMedicamento(int iidMedicamento)
         {
-            throw new NotImplementedException();
+            int rpta = 0;
+
+            try
+            {
+                using (var bd = new MedicoEntities()) //Creo una instancia del contexto
+                {
+                    //Obtengo el objeto cuyo id sea el mismo que se paso como parametro
+                    Medicamento oMedicamento = bd.Medicamento.Where(p => p.IIDMEDICAMENTO == iidMedicamento).First();
+                    //Hago un borrado logico
+                    oMedicamento.BHABILITADO = 0;
+                    //Guardo los cambios en la BD
+                    bd.SaveChanges();
+                    rpta = 1;
+                }
+            }
+            catch (Exception ex)
+            {
+                //Si no se pudo borrar 
+                rpta = 0;
+            }
+            //Retornamos rpta, tendra el valor de 0 o 1
+            return rpta;
         }
 
         public List<FormaFarmaceuticaCLS> listarFormaFarmaceutica()
