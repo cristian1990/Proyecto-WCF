@@ -51,20 +51,23 @@ namespace ServiciosMedicamento
                 {
                     //Listo el listado de tipos de medicamentos, que esten habilitados (1)
                     listaFormaFarmaceutica = bd.FormaFarmaceutica.Where(p => p.BHABILITADO == 1)
-                        //
-                        .Select(p => new FormaFarmaceuticaCLS
+                        //Selecciono algunos campos
+                        .Select(p => new FormaFarmaceuticaCLS //Retornara un objeto del tipo FormaFarmaceuticaCLS
                         {
+                            //Asigno los valores a las prop de la clase FormaFarmaceuticaCLS
                             iidformafarmaceutica = p.IIDFORMAFARMACEUTICA,
                             nombreFormaFarmaceutica = p.NOMBRE
 
-                        }).ToList();
+                        }).ToList(); //Ejecuto la consulta
                 }
             }
             catch (Exception ex)
             {
-                listaFormaFarmaceutica = null;
+                listaFormaFarmaceutica = null; //Si hay error la lista devuelve null
 
             }
+
+            //Retorno el listado
             return listaFormaFarmaceutica;
         }
 
