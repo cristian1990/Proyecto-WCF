@@ -73,7 +73,42 @@ namespace ServiciosMedicamento
 
         public List<MedicamentoCLS> listarMedicamentos()
         {
-            throw new NotImplementedException();
+            //Creo una lista
+            List<MedicamentoCLS> listaMedicamento = new List<MedicamentoCLS>();
+
+            try
+            {
+                using (var bd = new MedicoEntities()) //Creo el contexto de acceso a la BD
+                {
+                    listaMedicamento = (from medicamento in bd.Medicamento
+                                        join formafarmaceutica in bd.FormaFarmaceutica //Hago un Join
+                                        on medicamento.IIDFORMAFARMACEUTICA equals
+                                        formafarmaceutica.IIDFORMAFARMACEUTICA
+                                        //Selecciono algunos campos
+                                        select new MedicamentoCLS //Retornara un objeto del tipo MedicamentoCLS
+                                        {
+                                            //Asigno los valores a las prop de la clase MedicamentoCLS
+                                            iidmedicamento = medicamento.IIDMEDICAMENTO,
+                                            nombre = medicamento.NOMBRE,
+                                            precio = (decimal)medicamento.PRECIO, //Hago el casteo
+                                            nombreFormaFarmaceutica = formafarmaceutica.NOMBRE, //Obtengo el nombre del tipo (Join)
+                                            concentracion = medicamento.CONCENTRACION,
+                                            presentacion = medicamento.PRESENTACION,
+                                            stock = (int)medicamento.STOCK,
+                                            bhabilitado = (int)medicamento.BHABILITADO
+                                        }).ToList(); //Ejecuto la consulta
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                listaMedicamento = null; //Si hay error la lista devuelve null
+
+            }
+
+            //Retorno el listado de Medcamentos
+            return listaMedicamento;
         }
 
         public MedicamentoCLS recuperarMedicamento(int iidMedicamento)
