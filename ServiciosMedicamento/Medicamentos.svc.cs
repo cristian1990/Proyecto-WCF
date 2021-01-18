@@ -113,7 +113,32 @@ namespace ServiciosMedicamento
 
         public MedicamentoCLS recuperarMedicamento(int iidMedicamento)
         {
-            throw new NotImplementedException();
+            //Instancio una clase
+            MedicamentoCLS oMedicamentoCLS = new MedicamentoCLS();
+            
+            try
+            {
+                using (var bd = new MedicoEntities()) //Creo el contexto de acceso a la BD
+                {
+                    //Busco y almaceno el objeto medicamento encontrado, mediante su ID
+                    Medicamento oMedicamento = bd.Medicamento.Where(p => p.IIDMEDICAMENTO == iidMedicamento).First();
+                    //Cargo los valores de las prop del objeto
+                    oMedicamentoCLS.iidmedicamento = oMedicamento.IIDMEDICAMENTO;
+                    oMedicamentoCLS.iidformafarmaceutica = (int)oMedicamento.IIDFORMAFARMACEUTICA;
+                    oMedicamentoCLS.nombre = oMedicamento.NOMBRE;
+                    oMedicamentoCLS.precio = (decimal)oMedicamento.PRECIO; //Hago el casteo
+                    oMedicamentoCLS.stock = (int)oMedicamento.STOCK;
+                    oMedicamentoCLS.concentracion = oMedicamento.CONCENTRACION;
+                    oMedicamentoCLS.presentacion = oMedicamento.PRESENTACION;
+                }
+            }
+            catch (Exception ex)
+            {
+                oMedicamentoCLS = null; //Si hay error la lista devuelve null
+            }
+
+            //Retorno el medicamento
+            return oMedicamentoCLS;
         }
 
         public int registrarYActualizarMedicamentos(MedicamentoCLS oMedicamentoCLS)
