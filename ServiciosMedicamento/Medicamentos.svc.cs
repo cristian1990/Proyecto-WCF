@@ -143,7 +143,54 @@ namespace ServiciosMedicamento
 
         public int registrarYActualizarMedicamentos(MedicamentoCLS oMedicamentoCLS)
         {
-            throw new NotImplementedException();
+            int rpta = 0;
+            try
+            {
+                using (var bd = new MedicoEntities()) //Creo el contexto de acceso a la BD
+                {
+                    //Registar
+                    if (oMedicamentoCLS.iidmedicamento == 0)
+                    {
+                        //Creo una nueva instancia de Medicamento y cargo el valor de las propiedades del objeto MedicamentoCLS recibido
+                        Medicamento omedicamento = new Medicamento();
+                        omedicamento.IIDMEDICAMENTO = oMedicamentoCLS.iidmedicamento;
+                        omedicamento.NOMBRE = oMedicamentoCLS.nombre;
+                        omedicamento.PRECIO = oMedicamentoCLS.precio;
+                        omedicamento.STOCK = oMedicamentoCLS.stock;
+                        omedicamento.IIDFORMAFARMACEUTICA = oMedicamentoCLS.iidformafarmaceutica;
+                        omedicamento.CONCENTRACION = oMedicamentoCLS.concentracion;
+                        omedicamento.PRESENTACION = oMedicamentoCLS.presentacion;
+                        omedicamento.BHABILITADO = 1;
+
+                        bd.Medicamento.Add(omedicamento); //Indico que quiero agregar
+                        bd.SaveChanges(); //Agrego a la base de datos
+                        rpta = 1;
+                    }
+                    else //Editar (si el ID no es )
+                    {
+                        //Creo una nueva instancia de Medicamento y busco por id el medicamente mediante el objeto recibido
+                        //despues cargo el valor de las propiedades del objeto MedicamentoCLS recibido
+                        Medicamento oMedicamento = bd.Medicamento.Where(p => p.IIDMEDICAMENTO == oMedicamentoCLS.iidmedicamento).First();
+                        oMedicamento.IIDMEDICAMENTO = oMedicamentoCLS.iidmedicamento;
+                        oMedicamento.NOMBRE = oMedicamentoCLS.nombre;
+                        oMedicamento.PRECIO = oMedicamentoCLS.precio;
+                        oMedicamento.STOCK = oMedicamentoCLS.stock;
+                        oMedicamento.IIDFORMAFARMACEUTICA = oMedicamentoCLS.iidformafarmaceutica;
+                        oMedicamento.CONCENTRACION = oMedicamentoCLS.concentracion;
+                        oMedicamento.PRESENTACION = oMedicamentoCLS.presentacion;
+
+                        bd.SaveChanges(); //Guardo los cambios en la BD
+                        rpta = 1;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                rpta = 0;
+            }
+
+            //Retorno la rpta, contiene 0 o 1
+            return rpta;
         }
     }
 }
